@@ -35,3 +35,20 @@ def test_posts_return_200(api_session, post_id):
     response = api_session.get(f"{BASE_URL}/posts/{post_id}")
     assert response.status_code == 200
     assert response.json()["id"] == post_id
+
+def test_create_post_returns_201(api_session):
+    new_post = {"title": "My Test Post", "body": "Test body content", "userId": 1}
+    response = api_session.post(f"{BASE_URL}/posts", json=new_post)
+    assert response.status_code == 201
+    data = response.json()
+    assert data["title"] == "My Test Post"
+
+def test_update_post_returns_200(api_session):
+    updated = {"title": "Updated Title", "body": "Updated body", "userId": 1}
+    response = api_session.put(f"{BASE_URL}/posts/1", json=updated)
+    assert response.status_code == 200
+    assert response.json()["title"] == "Updated Title"
+
+def test_delete_post_returns_200(api_session):
+    response = api_session.delete(f"{BASE_URL}/posts/1")
+    assert response.status_code == 200
